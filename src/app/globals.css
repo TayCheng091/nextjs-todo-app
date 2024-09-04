@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-
 	body * {
 		@apply text-text-color leading-none;
 	}
@@ -42,13 +41,7 @@
 
 @layer components {
 
-	input::placeholder {
-		@apply leading-none text-red-600 ;
-	}
 	input {
-		@apply h-[30px] px-1.5 rounded border border-border-color outline-none ;
-	}
-	.btn {
-		@apply px-2 py-1.5 rounded border border-border-color bg-primary transition hover:opacity-80;
+		@apply h-[30px] py-1.5 px-1.5 rounded border border-border-color outline-none ;
 	}
 } 
