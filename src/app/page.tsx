@@ -92,7 +92,7 @@ export default function Home() {
       >
         <div className="grid gap-y-5">
           <div className="flex justify-between items-center pb-3 border-b border-border-color">
-            <h2 className="text-xl font-bold">Create Todo Item</h2>
+            <h2 className="text-xl font-bold">Create To-do Item</h2>
             <button onClick={closeAddItemModal}>close</button>
           </div>
           <div>
@@ -105,7 +105,7 @@ export default function Home() {
                   className="block min-w-20 text-gray-700 font-semibold text-nowrap"
                   htmlFor="title"
                 >
-                  Todo Title
+                  To-do Title
                 </label>
                 <input
                   type="text"
@@ -114,7 +114,7 @@ export default function Home() {
                   value={formData.title}
                   onChange={handleChange}
                   className="w-full px-3 py-2"
-                  placeholder="your todo title"
+                  placeholder="your to-do title"
                   required
                 />
               </div>
@@ -163,7 +163,7 @@ export default function Home() {
                   className="block text-gray-700 font-semibold mb-2 text-nowrap"
                   htmlFor="content"
                 >
-                  Todo Content
+                  To-do Content
                 </label>
                 <textarea
                   id="content"
@@ -171,7 +171,7 @@ export default function Home() {
                   value={formData.content}
                   onChange={handleChange}
                   className="w-full px-3 py-2 "
-                  placeholder="describe your todo content"
+                  placeholder="describe your to-do content"
                   required
                 />
               </div>
