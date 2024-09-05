@@ -11,7 +11,7 @@ function Header() {
   }
 
   return (
-    <div className="sticky top-0 flex justify-between items-center p-5 border">
+    <div className="sticky top-0 flex justify-between items-center p-5 border bg-white">
       <div>Fresh Search Logo</div>
       <div className="flex gap-x-2">
         <input
@@ -19,6 +19,7 @@ function Header() {
           placeholder="Search tasks"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
+          className="self-stretch px-2"
         />
         <Button onClick={handleSearch} style="primary">
           Search

@@ -17,7 +17,7 @@ const config: Config = {
     screens: {
       desktop: { min: "1200px" },
       laptop: { max: "1199px" },
-      mobile: { max: "639px" },
+      mobile: { max: "767px" },
     },
   },
   plugins: [],
