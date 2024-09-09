@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/Button";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Modal from "react-modal";
 
 interface TodoFormData {
@@ -9,6 +9,7 @@ interface TodoFormData {
   content: string;
   priority: TaskPriority;
   dueDate: string;
+  _id?: string;
 }
 
 enum TaskPriority {
@@ -33,6 +34,20 @@ const addTodoFormStyles = {
 Modal.setAppElement("body");
 
 export default function Home() {
+  const [todos, setTodos] = useState<TodoFormData[]>([]);
+
+  useEffect(() => {
+    async function fetchTodos() {
+      const response = await fetch("/api/todos");
+      const res = await response.json();
+      console.log(res.data);
+      setTodos(res.data);
+      console.log("todos = ", todos);
+    }
+
+    fetchTodos();
+  }, []);
+
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
 
   const [formData, setFormData] = useState<TodoFormData>({
@@ -56,8 +71,15 @@ export default function Home() {
     e.preventDefault();
     // TODO: Call api to create new todo item
     // onSubmit(formData);
-    // 清空表單
-    clearFormData();
+    fetch("/api/todo", { method: "POST", body: JSON.stringify(formData) })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("new data = ", data);
+        setTodos(data.data);
+      });
+
+    // close form modal
+    closeAddItemModal();
   };
 
   function clearFormData(): void {
@@ -75,6 +97,7 @@ export default function Home() {
   }
 
   function openAddItemModal(): void {
+    console.log("open modal");
     setIsOpen(true);
   }
 
@@ -83,6 +106,16 @@ export default function Home() {
       <Button style="primary" onClick={openAddItemModal}>
         Add
       </Button>
+      {todos.map((todo) => {
+        return (
+          <div key={todo._id} className="border rounded p-3">
+            <div>id = {todo._id}</div>
+            <div>title = {todo.title}</div>
+            <div>due date = {todo.dueDate}</div>
+            <div>content = {todo.content}</div>
+          </div>
+        );
+      })}
 
       <Modal
         isOpen={modalIsOpen}
