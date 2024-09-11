@@ -1,21 +1,16 @@
 "use client";
 
 import Button from "@/components/Button";
+import TodoCard from "@/components/TodoCard";
+import { ITodo, TaskPriority } from "@/lib/commonModels/models";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Modal from "react-modal";
 
-interface TodoFormData {
+interface ITodoFormData {
   title: string;
   content: string;
   priority: TaskPriority;
   dueDate: string;
-  _id?: string;
-}
-
-enum TaskPriority {
-  HIGH = "high",
-  MEDIUM = "medium",
-  LOW = "low",
 }
 
 const addTodoFormStyles = {
@@ -34,7 +29,7 @@ const addTodoFormStyles = {
 Modal.setAppElement("body");
 
 export default function Home() {
-  const [todos, setTodos] = useState<TodoFormData[]>([]);
+  const [todos, setTodos] = useState<ITodo[]>([]);
 
   useEffect(() => {
     async function fetchTodos() {
@@ -49,19 +44,19 @@ export default function Home() {
   }, []);
 
   const [modalIsOpen, setIsOpen] = useState<boolean>(false);
-
-  const [formData, setFormData] = useState<TodoFormData>({
+  const today = new Date().toISOString().split("T")[0];
+  const [todoFormData, setTodoFormData] = useState<ITodoFormData>({
     title: "",
     content: "",
     priority: TaskPriority.MEDIUM,
-    dueDate: "",
+    dueDate: today,
   });
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ): void => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setTodoFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -71,7 +66,7 @@ export default function Home() {
     e.preventDefault();
     // TODO: Call api to create new todo item
     // onSubmit(formData);
-    fetch("/api/todo", { method: "POST", body: JSON.stringify(formData) })
+    fetch("/api/todo", { method: "POST", body: JSON.stringify(todoFormData) })
       .then((res) => res.json())
       .then((data) => {
         console.log("new data = ", data);
@@ -83,11 +78,11 @@ export default function Home() {
   };
 
   function clearFormData(): void {
-    setFormData({
+    setTodoFormData({
       title: "",
       content: "",
       priority: TaskPriority.MEDIUM,
-      dueDate: "",
+      dueDate: today,
     });
   }
 
@@ -106,16 +101,11 @@ export default function Home() {
       <Button style="primary" onClick={openAddItemModal}>
         Add
       </Button>
-      {todos.map((todo) => {
-        return (
-          <div key={todo._id} className="border rounded p-3">
-            <div>id = {todo._id}</div>
-            <div>title = {todo.title}</div>
-            <div>due date = {todo.dueDate}</div>
-            <div>content = {todo.content}</div>
-          </div>
-        );
-      })}
+      <div className="grid grid-cols-3 gap-3 laptop:grid-cols-2 mobile:grid-cols-1">
+        {todos.map((todo) => {
+          return <TodoCard key={todo._id} todo={todo} />;
+        })}
+      </div>
 
       <Modal
         isOpen={modalIsOpen}
@@ -144,7 +134,7 @@ export default function Home() {
                   type="text"
                   id="title"
                   name="title"
-                  value={formData.title}
+                  value={todoFormData.title}
                   onChange={handleChange}
                   className="w-full px-3 py-2"
                   placeholder="your to-do title"
@@ -161,7 +151,7 @@ export default function Home() {
                 <select
                   id="priority"
                   name="priority"
-                  value={formData.priority}
+                  value={todoFormData.priority}
                   onChange={handleChange}
                   className="w-full px-3 py-2"
                 >
@@ -185,7 +175,7 @@ export default function Home() {
                   type="date"
                   id="dueDate"
                   name="dueDate"
-                  value={formData.dueDate}
+                  value={todoFormData.dueDate}
                   onChange={handleChange}
                   className="w-full px-3 py-2 "
                   required
@@ -201,7 +191,7 @@ export default function Home() {
                 <textarea
                   id="content"
                   name="content"
-                  value={formData.content}
+                  value={todoFormData.content}
                   onChange={handleChange}
                   className="w-full px-3 py-2 "
                   placeholder="describe your to-do content"
