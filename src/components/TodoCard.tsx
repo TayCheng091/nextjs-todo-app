@@ -1,5 +1,6 @@
 import { ITodo } from "@/lib/commonModels/models";
 import { dateFormat } from "@/lib/utils";
+import { MdDeleteForever, MdModeEdit } from "react-icons/md";
 import Tag from "./Tag";
 
 function TodoCard({ todo }: { todo: ITodo }) {
@@ -16,7 +17,16 @@ function TodoCard({ todo }: { todo: ITodo }) {
       <div>{content}</div>
       <div className="flex justify-between items-center">
         <div>Due: {dateFormat(new Date(dueDate))}</div>
-        <div>edit button / delete button</div>
+        <div className="flex gap-x-2">
+          <MdDeleteForever
+            size="20px"
+            className="cursor-pointer transition-all hover:scale-125 hover:fill-primary"
+          />
+          <MdModeEdit
+            size="20px"
+            className="cursor-pointer transition-all hover:scale-125 hover:fill-primary"
+          />
+        </div>
       </div>
     </div>
   );
