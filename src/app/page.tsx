@@ -2,14 +2,14 @@
 
 import Button from "@/components/Button";
 import TodoCard from "@/components/TodoCard";
-import { ITodo, TaskPriority } from "@/lib/commonModels/models";
+import { ITaskPriority, ITodo } from "@/lib/commonModels/models";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Modal from "react-modal";
 
 interface ITodoFormData {
   title: string;
   content: string;
-  priority: TaskPriority;
+  priority: ITaskPriority;
   dueDate: string;
 }
 
@@ -35,9 +35,7 @@ export default function Home() {
     async function fetchTodos() {
       const response = await fetch("/api/todos");
       const res = await response.json();
-      console.log(res.data);
       setTodos(res.data);
-      console.log("todos = ", todos);
     }
 
     fetchTodos();
@@ -48,7 +46,7 @@ export default function Home() {
   const [todoFormData, setTodoFormData] = useState<ITodoFormData>({
     title: "",
     content: "",
-    priority: TaskPriority.MEDIUM,
+    priority: ITaskPriority.MEDIUM,
     dueDate: today,
   });
 
@@ -64,12 +62,10 @@ export default function Home() {
 
   const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
-    // TODO: Call api to create new todo item
-    // onSubmit(formData);
+    // Call api to create new todo item
     fetch("/api/todo", { method: "POST", body: JSON.stringify(todoFormData) })
       .then((res) => res.json())
       .then((data) => {
-        console.log("new data = ", data);
         setTodos(data.data);
       });
 
@@ -81,7 +77,7 @@ export default function Home() {
     setTodoFormData({
       title: "",
       content: "",
-      priority: TaskPriority.MEDIUM,
+      priority: ITaskPriority.MEDIUM,
       dueDate: today,
     });
   }
@@ -92,7 +88,6 @@ export default function Home() {
   }
 
   function openAddItemModal(): void {
-    console.log("open modal");
     setIsOpen(true);
   }
 
@@ -103,7 +98,7 @@ export default function Home() {
       </Button>
       <div className="grid grid-cols-3 gap-3 laptop:grid-cols-2 mobile:grid-cols-1">
         {todos.map((todo) => {
-          return <TodoCard key={todo._id} todo={todo} />;
+          return <TodoCard key={todo._id} todo={todo} setTodos={setTodos} />;
         })}
       </div>
 
@@ -155,7 +150,7 @@ export default function Home() {
                   onChange={handleChange}
                   className="w-full px-3 py-2"
                 >
-                  {Object.entries(TaskPriority).map(([key, value]) => {
+                  {Object.entries(ITaskPriority).map(([key, value]) => {
                     return (
                       <option value={value} key={key}>
                         {value}

@@ -14,9 +14,6 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 
     // const todos = await db.collection("todos").find().toArray();
     const allTodos = await TodoItem.find();
-    console.log("allTodos start");
-    console.log(allTodos);
-    console.log("allTodos end");
     return NextResponse.json({ data: allTodos }, { status: 200 });
   } catch (e) {
     console.error(e);
